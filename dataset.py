@@ -6,6 +6,7 @@ import random
 import torch
 from torch.utils.data import Dataset
 
+# Change according to your dataset location
 data_dir = "/mnt/storage/Anomaly Detection/Dataset/UCF-Crime/"
 
 class Normal_Loader(Dataset):
