@@ -6,8 +6,6 @@ from models.generator import AE
 
 import numpy as np
 
-
-
 input = torch.rand(2048)
 np.savetxt('./input.txt', input.detach().numpy())
 
@@ -22,7 +20,6 @@ netD = Discriminator() # Discriminator -> Fully Connected Layer
 # Training parameters
 lr = 0.002 # Learning rate (original is 0.00002)
 epochs = 1 # Epochs (original is 8192)
-
 
 # Optimizers
 optimizerG = optim.RMSprop(

@@ -93,7 +93,15 @@ class Anomaly_Loader(Dataset):
 
 if __name__ == "__main__":
     loader2 = Normal_Loader(is_train=0)
-    print(len(loader2))
+
+    loaded_data = np.array(loader2.__getitem__(0)[0])
+    print(loaded_data.shape)
+
+    loaded_data = loaded_data.reshape(16,-1)
+    print(loaded_data.shape)
+
+    print(np.savetxt('./output_concat.txt',np.array(loader2.__getitem__(0)[0])))
+
 
 
 
