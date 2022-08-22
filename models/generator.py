@@ -7,13 +7,15 @@ class AE(nn.Module):
         FC[2048, 1024, 512, 256, 512, 1024, 2048]
     """
 
-    def __init__(self, img_size):
+    def __init__(self):
         super().__init__()
 
-        self.encoder = nn.Sequential(
-                nn.Linear(img_size, 2048),
-                nn.ReLU(),
+        img_size = 2048
 
+        self.encoder = nn.Sequential(
+                # nn.Linear(img_size, 2048),
+                # nn.ReLU(),
+                #
                 nn.Linear(2048, 1024),
                 nn.ReLU(),
 
@@ -30,10 +32,10 @@ class AE(nn.Module):
                 nn.Linear(512, 1024),
                 nn.LeakyReLU(0.3),
 
-                nn.Linear(1024, 2046),
-                nn.LeakyReLU(0.3),
+                nn.Linear(1024, 2048),
+                # nn.LeakyReLU(0.3),
 
-                nn.Linear(2046, img_size),
+                # nn.Linear(2048, img_size),
 
                 nn.Sigmoid()
         )
