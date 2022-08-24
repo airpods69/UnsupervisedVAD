@@ -55,7 +55,11 @@ for epoch in range(epochs):
 
         # Calculating the loss function
         loss = loss_function(reconstructed, image)
-
+        
+        #GENERATE PSEUDO LABELS
+        #for each instance,if loss >treshold: label=1
+        #else, label=0
+        
         # The gradients are set to zero,
         # the gradient is computed and stored.
         # .step() performs parameter update
