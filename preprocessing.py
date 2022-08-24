@@ -71,7 +71,11 @@ plt.ylabel('Loss')
 print(type(losses))
 
 # Plotting the last 100 values
+# print(torch.tensor.detach().numpy().array(losses[-100:]).shape)
+losses = [i.item() for i in losses]
+
 plt.plot(losses[-100:])
+plt.show()
 
 
 
