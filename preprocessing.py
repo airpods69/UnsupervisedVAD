@@ -43,7 +43,12 @@ epochs = 1
 outputs = []
 losses = []
 for epoch in range(epochs):
-    for (image, _) in tqdm(normal_train_loader):
+
+    running_loss = 0.
+
+    print("Epoch No.: {}".format(epoch))
+
+    for (image, inputs) in tqdm(normal_train_loader):
 
         # Output of Autoencoder
         reconstructed = netG.forward(image)
@@ -61,12 +66,18 @@ for epoch in range(epochs):
         # Storing the losses in a list for plotting
         losses.append(loss)
 
+        running_loss += loss.item() * inputs.size(0)
+
+    epoch_loss = running_loss / len(normal_train_dataset)
+    # epoch_acc = running_corrects / len(normal_train_dataset) * 100.
+    print("Loss: {}".format(epoch_loss))
+
     outputs.append((epochs, image, reconstructed))
 
 # Defining the Plot Style
-plt.style.use('fivethirtyeight')
-plt.xlabel('Iterations')
-plt.ylabel('Loss')
+# plt.style.use('fivethirtyeight')
+# plt.xlabel('Iterations')
+# plt.ylabel('Loss')
 
 print(type(losses))
 
@@ -74,10 +85,12 @@ print(type(losses))
 # print(torch.tensor.detach().numpy().array(losses[-100:]).shape)
 losses = [i.item() for i in losses]
 
-plt.plot(losses[-100:])
-plt.show()
+# plt.plot(losses[-100:])
+# plt.show()
 
+losses = np.array(losses)
 
+np.save("./losses.npy", losses)
 
 
 
