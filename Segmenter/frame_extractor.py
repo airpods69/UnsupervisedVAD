@@ -19,28 +19,24 @@ def frame_extractor(path, video, frames_path):
 
     capture = cv2.VideoCapture(os.path.join(path, video))
 
+    video_dir = os.path.join(path, video)
+
+    if not os.path.exists(video_dir):
+        os.makedirs(video_dir)
+
     # Keeping track of Frames
     frameNo = 0
     frameCount = 0
-    segmentNo = 0
 
     while(True):
 
         success, frame = capture.read() # Success -> if frame read successfully or not
 
-        if frameNo % 16 == 0:
-            segmentNo += 1 # Change segment after every 16 Frames
-            frameNo = 0
-            segment_dir = os.path.join(frames_dir, f'Segment_{segmentNo}/')
-            if not os.path.exists(segment_dir):
-                os.makedirs(segment_dir)
-
-
         frameNo += 1
         frameCount += 1
         if success:
-            print(f"Wrote frame_{frameNo}_Segment_{segmentNo}.jpg")
-            cv2.imwrite(os.path.join(segment_dir ,f'frame_{frameNo}_Segment_{segmentNo}.jpg'), frame)
+            print(f"Wrote {os.path.join(frames_dir ,f'frame_{frameNo}.jpg')}")
+            cv2.imwrite(os.path.join(frames_dir ,f'frame_{frameNo}.jpg'), frame)
         else:
             break
 
