@@ -22,10 +22,15 @@ class Dataset(Dataset):
 
         self.listOfFiles = list()
         for (dirpath, dirnames, filenames) in os.walk(self.path):
+            print(dirnames)
             self.listOfFiles += [os.path.join(dirpath, file) for file in filenames]
 
-        self.transform = transforms.Compose([transforms.ToTensor()])
-
+        self.transfrom = transforms.Compose([
+            transforms.CenterCrop((256,256)),
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
+        ])
 
     def __len__(self):
         return len(self.listOfFiles)
@@ -36,11 +41,7 @@ class Dataset(Dataset):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = Image.fromarray(image)
 
-        import matplotlib.pyplot as plt
-
-        plt.imshow(image)
-        plt.show()
-
+        image = self.transfrom(image)
 
         return image
 
