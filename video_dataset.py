@@ -138,7 +138,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
 
             elif record.num_frames < (self.num_segments * self.frames_per_segment):
                 self.num_segments = record.num_frames // self.frames_per_segment
-                print("\n Num_segments automatically changed to what you want")
+                print("\nNum_segments automatically changed to what you wan")
                 # print(f"\nDataset Warning: video {record.path} has {record.num_frames} frames "
                 #       f"but the dataloader is set up to load "
                 #       f"(num_segments={self.num_segments})*(frames_per_segment={self.frames_per_segment})"
