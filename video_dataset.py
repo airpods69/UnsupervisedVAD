@@ -111,7 +111,8 @@ class VideoFrameDataset(torch.utils.data.Dataset):
                  frames_per_segment: int = 1,
                  imagefile_template: str='img_{:05d}.jpg',
                  transform = None,
-                 test_mode: bool = False):
+                 test_mode: bool = False,
+                 start_indices:list=[]):
         super(VideoFrameDataset, self).__init__()
 
         self.root_path = root_path
@@ -121,9 +122,13 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         self.imagefile_template = imagefile_template
         self.transform = transform
         self.test_mode = test_mode
+        self.start_indices=np.array(start_indices)
 
         self._parse_annotationfile()
         self._sanity_check_samples()
+        self._get_start_indices()
+
+        
 
     def _load_image(self, directory: str, idx: int) -> Image.Image:
         return Image.open(os.path.join(directory, self.imagefile_template.format(idx))).convert('RGB')
@@ -138,7 +143,10 @@ class VideoFrameDataset(torch.utils.data.Dataset):
 
             elif record.num_frames < (self.num_segments * self.frames_per_segment):
                 self.num_segments = record.num_frames // self.frames_per_segment
+
+                print(self.start_indices)
                 print("\nNum_segments automatically changed to what you wan")
+                
                 # print(f"\nDataset Warning: video {record.path} has {record.num_frames} frames "
                 #       f"but the dataloader is set up to load "
                 #       f"(num_segments={self.num_segments})*(frames_per_segment={self.frames_per_segment})"
@@ -155,6 +163,8 @@ class VideoFrameDataset(torch.utils.data.Dataset):
             List of indices of where the frames of each
             segment are to be loaded from.
         """
+        print('calling function')
+
         # choose start indices that are perfectly evenly spread across the video frames.
         if self.test_mode:
             distance_between_indices = (record.num_frames - self.frames_per_segment + 1) / float(self.num_segments)
@@ -164,12 +174,22 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         # randomly sample start indices that are approximately evenly spread across the video frames.
         else:
             self.num_segments = record.num_frames // self.frames_per_segment
+            ''' basically we need to make start_indices like [0, 16, 32, ......, 976], soo it will then take consecutive frames 
+          starting from 0 and ending till some index less than the end_frame, this will also solve the problem of overlapping 
+          frames. '''
+            
+            self.num_segments = record.num_frames // self.frames_per_segment
+            #start_indices=np.array([])
+            for seg in range(self.num_segments):
+                self.start_indices.append(16*seg)
+                '''
             max_valid_start_index = (record.num_frames - self.frames_per_segment + 1) // self.num_segments
 
             start_indices = np.multiply(list(range(self.num_segments)), max_valid_start_index) + \
                       np.random.randint(max_valid_start_index, size=self.num_segments)
-
-        return start_indices
+                      '''
+        print(self.start_indices)
+        return self.start_indices
 
     def __getitem__(self, idx: int) -> Union[
         Tuple[List[Image.Image], Union[int, List[int]]],
@@ -214,10 +234,10 @@ class VideoFrameDataset(torch.utils.data.Dataset):
             if the transform "ImglistToTensor" is used
             3) or anything else if a custom transform is used.
         """
-
+        print(frame_start_indices)
         frame_start_indices = frame_start_indices + record.start_frame
         images = list()
-
+        print(frame_start_indices)
         # from each start_index, load self.frames_per_segment
         # consecutive frames
         for start_index in frame_start_indices:
