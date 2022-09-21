@@ -180,7 +180,8 @@ class VideoFrameDataset(torch.utils.data.Dataset):
             for seg in range(self.num_segments):
                 self.start_indices.append(16*seg)
          
-        print(self.start_indices)
+        self.start_indices = np.array(self.start_indices)
+#         print(self.start_indices)
         return self.start_indices
 
     def __getitem__(self, idx: int) -> Union[
@@ -226,10 +227,10 @@ class VideoFrameDataset(torch.utils.data.Dataset):
             if the transform "ImglistToTensor" is used
             3) or anything else if a custom transform is used.
         """
-        print(frame_start_indices)
-        frame_start_indices = frame_start_indices + record.start_frame
+#         print(frame_start_indices)
+#         frame_start_indices = frame_start_indices + record.start_frame
         images = list()
-        print(frame_start_indices)
+#         print(frame_start_indices)
         # from each start_index, load self.frames_per_segment
         # consecutive frames
         for start_index in frame_start_indices:
