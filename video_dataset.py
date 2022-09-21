@@ -228,7 +228,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
             3) or anything else if a custom transform is used.
         """
 #         print(frame_start_indices)
-#         frame_start_indices = frame_start_indices + record.start_frame
+        frame_start_indices = frame_start_indices + record.start_frame
         images = list()
 #         print(frame_start_indices)
         # from each start_index, load self.frames_per_segment
