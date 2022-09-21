@@ -228,7 +228,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
             3) or anything else if a custom transform is used.
         """
 #         print(frame_start_indices)
-        for i in range(0,len(frame_start_indices)):
+        for j in range(0,len(frame_start_indices)):
             frame_start_indices[j]=frame_start_indices[j]+record.start_frame
             
        
