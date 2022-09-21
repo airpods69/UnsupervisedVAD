@@ -163,6 +163,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
                                       for x in range(self.num_segments)])
         # randomly sample start indices that are approximately evenly spread across the video frames.
         else:
+            self.num_segments = record.num_frames // self.frames_per_segment
             max_valid_start_index = (record.num_frames - self.frames_per_segment + 1) // self.num_segments
 
             start_indices = np.multiply(list(range(self.num_segments)), max_valid_start_index) + \
