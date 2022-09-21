@@ -122,11 +122,11 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         self.imagefile_template = imagefile_template
         self.transform = transform
         self.test_mode = test_mode
-        self.start_indices=np.array(start_indices)
+        self.start_indices=start_indices
 
         self._parse_annotationfile()
         self._sanity_check_samples()
-       
+        
 
         
 
@@ -145,7 +145,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
                 self.num_segments = record.num_frames // self.frames_per_segment
 
                 print(self.start_indices)
-                print("\nNum_segments automatically changed to what you wan")
+              
                 
                 # print(f"\nDataset Warning: video {record.path} has {record.num_frames} frames "
                 #       f"but the dataloader is set up to load "
@@ -174,20 +174,12 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         # randomly sample start indices that are approximately evenly spread across the video frames.
         else:
             self.num_segments = record.num_frames // self.frames_per_segment
-            ''' basically we need to make start_indices like [0, 16, 32, ......, 976], soo it will then take consecutive frames 
-          starting from 0 and ending till some index less than the end_frame, this will also solve the problem of overlapping 
-          frames. '''
+          
             
             self.num_segments = record.num_frames // self.frames_per_segment
-            #start_indices=np.array([])
             for seg in range(self.num_segments):
                 self.start_indices.append(16*seg)
-                '''
-            max_valid_start_index = (record.num_frames - self.frames_per_segment + 1) // self.num_segments
-
-            start_indices = np.multiply(list(range(self.num_segments)), max_valid_start_index) + \
-                      np.random.randint(max_valid_start_index, size=self.num_segments)
-                      '''
+         
         print(self.start_indices)
         return self.start_indices
 
