@@ -126,7 +126,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
 
         self._parse_annotationfile()
         self._sanity_check_samples()
-        self._get_start_indices()
+       
 
         
 
