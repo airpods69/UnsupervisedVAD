@@ -143,10 +143,8 @@ class VideoFrameDataset(torch.utils.data.Dataset):
 
             elif record.num_frames < (self.num_segments * self.frames_per_segment):
                 self.num_segments = record.num_frames // self.frames_per_segment
-
-                print(self.start_indices)
+#                 print(self.start_indices)
               
-                
                 # print(f"\nDataset Warning: video {record.path} has {record.num_frames} frames "
                 #       f"but the dataloader is set up to load "
                 #       f"(num_segments={self.num_segments})*(frames_per_segment={self.frames_per_segment})"
@@ -174,13 +172,11 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         # randomly sample start indices that are approximately evenly spread across the video frames.
         else:
             self.num_segments = record.num_frames // self.frames_per_segment
-          
             
-            self.num_segments = record.num_frames // self.frames_per_segment
             for seg in range(self.num_segments):
-                self.start_indices.append(16*seg)
+                self.start_indices.append(16*seg+1)
          
-        self.start_indices = np.array(self.start_indices)
+#         self.start_indices = np.array(self.start_indices)
 #         print(self.start_indices)
         return self.start_indices
 
@@ -204,7 +200,8 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         """
         record: VideoRecord = self.video_list[idx]
 
-        frame_start_indices: 'np.ndarray[int]' = self._get_start_indices(record)
+#         frame_start_indices: 'np.ndarray[int]' = self._get_start_indices(record)
+        frame_start_indices: '[]' = self._get_start_indices(record)
 
         return self._get(record, frame_start_indices)
 
@@ -228,10 +225,9 @@ class VideoFrameDataset(torch.utils.data.Dataset):
             3) or anything else if a custom transform is used.
         """
 #         print(frame_start_indices)
-        for j in range(0,len(frame_start_indices)):
-            frame_start_indices[j]=frame_start_indices[j]+record.start_frame
-            
-       
+#         for j in range(0,len(frame_start_indices)):
+#             frame_start_indices[j]=frame_start_indices[j]+record.start_frame
+        print(frame_start_indices)
     
         images = list()
 #         print(frame_start_indices)
