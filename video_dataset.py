@@ -111,8 +111,8 @@ class VideoFrameDataset(torch.utils.data.Dataset):
                  frames_per_segment: int = 1,
                  imagefile_template: str='img_{:05d}.jpg',
                  transform = None,
-                 test_mode: bool = False,
-                 #start_indices:list=[]):
+                 test_mode: bool = False):
+                 
         super(VideoFrameDataset, self).__init__()
 
         self.root_path = root_path
@@ -122,7 +122,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         self.imagefile_template = imagefile_template
         self.transform = transform
         self.test_mode = test_mode
-        #self.start_indices=start_indices
+     
 
         self._parse_annotationfile()
         self._sanity_check_samples()
