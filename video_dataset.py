@@ -161,7 +161,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
             List of indices of where the frames of each
             segment are to be loaded from.
         """
-        print('calling function')
+#         print('calling function')
 
         # choose start indices that are perfectly evenly spread across the video frames.
         if self.test_mode:
@@ -228,7 +228,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
 #         print(frame_start_indices)
 #         for j in range(0,len(frame_start_indices)):
 #             frame_start_indices[j]=frame_start_indices[j]+record.start_frame
-        print(frame_start_indices)
+#         print(frame_start_indices)
     
         images = list()
 #         print(frame_start_indices)
