@@ -1,40 +1,10 @@
 import cv2
 import os
 
-try:
-  import google.colab
-  IN_COLAB = True
-except:
-  IN_COLAB = False
-
 def write_path_to_annotation(write_path, frameNo, file):
 
-    global IN_COLAB
-
-    classes = {
-        "Normal" : 0,
-        "Abuse" : 1,
-        "Arrest" : 2,
-        "Arson" : 3,
-        "Assault" : 4,
-        "Burglary" : 5,
-        "Explosion" : 6,
-        "Fighting" : 7,
-        "RoadAccidents" : 8,
-        "Robbery" : 9,
-        "Shooting" : 10,
-        "Shoplifting" : 11,
-        "Stealing" : 12,
-        "Vandalism" : 13,
-    }
-
-    if not IN_COLAB:
-        class_name,video_name = write_path.split('/')[3], write_path.split('/')[4]
-
-    else:
-        class_name,video_name = write_path.split('/')[4], write_path.split('/')[5]
-
-    file.write("{}/{} 1 {} {}\n".format(class_name, video_name, frameNo, classes[class_name]))
+    class_name,video_name = write_path.split('/')[4], write_path.split('/')[5]
+    file.write("{}/{} 1 {} 0 \\n".format(class_name, video_name, frameNo))
 
 
 def frame_extractor(path, video, frames_path):
@@ -66,12 +36,7 @@ def frame_extractor(path, video, frames_path):
     frameNo = 0
     frameCount = 0
 
-    global IN_COLAB
-
-    if not IN_COLAB:
-        file = open('./UnsupervisedVAD/train.txt', 'w')
-
-    file = open('./train.txt', 'w')
+    file = open('./UnsupervisedVAD/train.txt', 'a')
 
     while(True):
 
@@ -82,6 +47,8 @@ def frame_extractor(path, video, frames_path):
         if success:
             
             write_path = os.path.join(frames_dir ,'frame_{:05d}.jpg'.format(frameNo))
+            print(f"Wrote {write_path}")
+            
             cv2.imwrite(write_path, frame)
         else:
             break
@@ -109,10 +76,8 @@ def video_selector(path):
             frame_extractor(class_dir, j, path)
 
 
-if not IN_COLAB:
-    path = "./Dataset/"
-else:
-    path = "./Unsupervised/Dataset/"
+
+path = "./UnsupervisedVAD/Dataset/"
 
 
 # frame_extractor(path, video)
@@ -120,4 +85,3 @@ video_selector(path)
 # print(os.system('pwd'))
 
 print("Done")
-
