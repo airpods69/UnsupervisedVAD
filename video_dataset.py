@@ -112,7 +112,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
                  imagefile_template: str='img_{:05d}.jpg',
                  transform = None,
                  test_mode: bool = False,
-                 start_indices:list=[]):
+                 #start_indices:list=[]):
         super(VideoFrameDataset, self).__init__()
 
         self.root_path = root_path
@@ -122,7 +122,7 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         self.imagefile_template = imagefile_template
         self.transform = transform
         self.test_mode = test_mode
-        self.start_indices=start_indices
+        #self.start_indices=start_indices
 
         self._parse_annotationfile()
         self._sanity_check_samples()
@@ -172,13 +172,14 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         # randomly sample start indices that are approximately evenly spread across the video frames.
         else:
             self.num_segments = record.num_frames // self.frames_per_segment
-            
+            start_indices=[]
             for seg in range(self.num_segments):
-                self.start_indices.append(16*seg+1)
-         
+           
+                start_indices.append(16*seg+1)
+            start_indices=np.array(start_indices)
 #         self.start_indices = np.array(self.start_indices)
 #         print(self.start_indices)
-        return self.start_indices
+        return start_indices
 
     def __getitem__(self, idx: int) -> Union[
         Tuple[List[Image.Image], Union[int, List[int]]],
@@ -200,8 +201,8 @@ class VideoFrameDataset(torch.utils.data.Dataset):
         """
         record: VideoRecord = self.video_list[idx]
 
-#         frame_start_indices: 'np.ndarray[int]' = self._get_start_indices(record)
-        frame_start_indices: '[]' = self._get_start_indices(record)
+        frame_start_indices: 'np.ndarray[int]' = self._get_start_indices(record)
+        #frame_start_indices: '[]' = self._get_start_indices(record)
 
         return self._get(record, frame_start_indices)
 
