@@ -239,12 +239,15 @@ class VideoFrameDataset(torch.utils.data.Dataset):
 
             # load self.frames_per_segment consecutive frames
             for _ in range(self.frames_per_segment):
-                image = self._load_image(record.path, frame_index)
-                images.append(image)
+                try:
+                    image = self._load_image(record.path, frame_index)
+                    images.append(image)
 
-                if frame_index < record.end_frame:
-                    frame_index += 1
-
+                    if frame_index < record.end_frame:
+                        frame_index += 1
+                except:
+                    continue
+                    
         if self.transform is not None:
             images = self.transform(images)
 
